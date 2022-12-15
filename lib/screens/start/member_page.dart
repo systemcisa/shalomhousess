@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hanoimall/constants/common_size.dart';
+import 'package:shalomhouse/constants/common_size.dart';
 
-class AddreesPage extends StatelessWidget {
-  const AddreesPage({Key? key}) : super(key: key);
+class MemberPage extends StatelessWidget {
+  const MemberPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

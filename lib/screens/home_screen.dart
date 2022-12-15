@@ -1,10 +1,12 @@
 import 'package:beamer/beamer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hanoimall/router/locations.dart';
-import 'package:hanoimall/screens/home/orders_page.dart';
-import 'package:hanoimall/screens/home/records_page.dart';
-import 'package:hanoimall/states/user_provider.dart';
-import 'package:hanoimall/widgets/expandable_fab.dart';
+import 'package:shalomhouse/router/locations.dart';
+import 'package:shalomhouse/screens/home/orders_page.dart';
+import 'package:shalomhouse/screens/home/records_page.dart';
+import 'package:shalomhouse/states/user_notifier.dart';
+import 'package:shalomhouse/widgets/expandable_fab.dart';
 import 'package:provider/provider.dart';
 
 
@@ -24,8 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: IndexedStack(
         index: _bottomSelectedIndex,
         children: [
-
-         OrdersPage(),
+          OrdersPage(),
           RecordsPage(),
           Container(color: Colors.accents[6],)
         ],
@@ -54,19 +55,21 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       appBar: AppBar(
-        title: Text('SOMI MALL', style: Theme.of(context).appBarTheme.titleTextStyle,),
+        title: Text('SHALOM HOUSE', style: Theme.of(context).appBarTheme.titleTextStyle,),
         actions: [
-
-          IconButton(onPressed: (){
-            context.read<UserProvider>().setUserAuth(true);
-          }, icon: Icon(Icons.logout,))
+          IconButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+                context.beamToNamed("/");
+              },
+              icon: Icon(CupertinoIcons.nosign)),
         ],),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: _bottomSelectedIndex,
           items: [
-            BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: '주문'),
-            BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: '사입'),
-            BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: '설정/데이터'),
+            BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: '홈'),
+            BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: '시설물관리'),
+            BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: 'me'),
           ],
           onTap: (index){
             setState((){

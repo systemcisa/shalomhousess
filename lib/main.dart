@@ -2,11 +2,11 @@ import 'package:beamer/beamer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:hanoimall/router/locations.dart';
-import 'package:hanoimall/screens/splash_screen.dart';
-import 'package:hanoimall/screens/start_screen.dart';
-import 'package:hanoimall/states/user_provider.dart';
-import 'package:hanoimall/utils/logger.dart';
+import 'package:shalomhouse/router/locations.dart';
+import 'package:shalomhouse/screens/splash_screen.dart';
+import 'package:shalomhouse/screens/start_screen.dart';
+import 'package:shalomhouse/states/user_notifier.dart';
+import 'package:shalomhouse/utils/logger.dart';
 import 'package:provider/provider.dart';
 
 
@@ -15,11 +15,11 @@ final _routerDelegate = BeamerDelegate(
       BeamGuard(
           pathBlueprints: [
             ...HomeLocation().pathBlueprints,
-            //  ...InputLocation().pathBlueprints,
-            //  ...ItemLocation().pathBlueprints,
+             ...InputLocation().pathBlueprints,
+             ...ItemLocation().pathBlueprints,
           ],
           check: (context, location) {
-            return context.watch<UserProvider>().userState;
+            return context.watch<UserNotifier>().user != null;
           },
           showPage: BeamPage(child: StartScreen()))
     ],
@@ -74,9 +74,9 @@ class TomatoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<UserProvider>(
+    return ChangeNotifierProvider<UserNotifier>(
       create: (BuildContext context) {
-        return UserProvider();
+        return UserNotifier();
       },
       child: MaterialApp.router(
         theme: ThemeData(

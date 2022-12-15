@@ -2,12 +2,23 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
-import 'package:hanoimall/constants/common_size.dart';
-import 'package:hanoimall/data/record_model.dart';
-import 'package:hanoimall/router/locations.dart';
-import 'package:hanoimall/states/category_notifier.dart';
-import 'package:hanoimall/utils/logger.dart';
+import 'package:shalomhouse/constants/common_size.dart';
+import 'package:shalomhouse/data/record_model.dart';
+import 'package:shalomhouse/router/locations.dart';
+import 'package:shalomhouse/states/category_notifier.dart';
+import 'package:shalomhouse/utils/logger.dart';
 import 'package:intl/intl.dart';
+
+
+
+var _Vdivider = VerticalDivider(
+  color: Colors.redAccent,
+  width: 80,
+  indent: 10,
+  endIndent: 10,
+  thickness: 2,
+);
+
 
 class RecordListWidget extends StatelessWidget {
   final RecordModel record;
@@ -18,7 +29,7 @@ class RecordListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (imgSize == null) {
       Size size = MediaQuery.of(context).size;
-      imgSize = size.width / 6;
+      imgSize = size.width / 300;
     }
 
     return InkWell(
@@ -32,55 +43,73 @@ class RecordListWidget extends StatelessWidget {
         context.beamToNamed(newPath);
       },
       child: SizedBox(
-        height: imgSize,
-        child: Row(
+       // height: imgSize,
+       height: 110,
+        child: Column(
           children: [
-            Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      categoriesMapEngToKor[record.category] ??
-                          "선택",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2!
-                          .copyWith(
-                          decoration:
-                          TextDecoration.underline),
-                    ),
-                    Text(
-                      record.title,
-                      style: Theme.of(context).textTheme.subtitle2,
-                    ),
-                    Text(
-                      record.detail,
-                      maxLines:1,
-                      style: Theme.of(context).textTheme.subtitle2,
-                    ),
-                    Text('${record.price.toString()},000원',style: Theme.of(context).textTheme.subtitle2),
-                    Text(
-                      DateFormat('MM-dd kkmm').format(record.createdDate),
-
-                      style: Theme.of(context).textTheme.subtitle2,
-                    ),
-                    Expanded(
-                      child: Container(),
-                    ),
-                  ],
-                )),
-            SizedBox(
-              width: common_sm_padding,
+            Text(
+              DateFormat('MM-dd kkmm').format(record.createdDate),
+              style:  TextStyle(fontSize: 20)
             ),
-            SizedBox(
-                height: imgSize,
-                width: imgSize,
-                child: ExtendedImage.network(
-                  record.imageDownloadUrls[0],
-                  fit: BoxFit.cover,
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(12),
-                )),
+            Expanded(
+              child: Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '신발A',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2!
+                            .copyWith(
+                            decoration:
+                            TextDecoration.underline),
+                      ),
+                      Text(
+                        record.address1,
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
+                    ],
+                  ),
+                  _Vdivider,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'NUZZON',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2!
+                            .copyWith(
+                            decoration:
+                            TextDecoration.underline),
+                      ),
+                      Text(
+                        record.address2,
+                        style: Theme.of(context).textTheme.subtitle2,
+                      ),
+                    ],
+                  ),
+
+
+                  SizedBox(
+                    width: common_sm_padding,
+                  ),
+
+                  // SizedBox(
+                  //     height: imgSize,
+                  //     width: imgSize,
+                  //     child:
+                  //     ExtendedImage.network(
+                  //       record.imageDownloadUrls[0],
+                  //       fit: BoxFit.cover,
+                  //       shape: BoxShape.rectangle,
+                  //       borderRadius: BorderRadius.circular(12),
+                  //     )),
+                ],
+              ),
+            ),
           ],
         ),
       ),

@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:hanoimall/constants/common_size.dart';
-import 'package:hanoimall/states/user_provider.dart';
-import 'package:hanoimall/utils/logger.dart';
+import 'package:shalomhouse/constants/common_size.dart';
+import 'package:shalomhouse/states/user_notifier.dart';
+import 'package:shalomhouse/utils/logger.dart';
 import 'package:provider/provider.dart';
 
 class IntroPage extends StatelessWidget {
@@ -11,7 +11,7 @@ class IntroPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    logger.d('current user state: ${context.read<UserProvider>().userState}');
+ //   logger.d('current user state: ${context.read<UserNotifier>().userState}');
     return LayoutBuilder(
       builder: (BuildContext , BoxConstraints ) {
         Size size = MediaQuery.of(context).size;
