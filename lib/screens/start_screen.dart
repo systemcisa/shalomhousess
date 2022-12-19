@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shalomhouse/screens/start/member_page.dart';
 import 'package:shalomhouse/screens/start/auth_page.dart';
 import 'package:shalomhouse/screens/start/intro_page.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +18,6 @@ class StartScreen extends StatelessWidget {
            //   physics: NeverScrollableScrollPhysics(),
               children: [
             IntroPage(),
-            MemberPage(),
             AuthPage(),
             Container(color: Colors.accents[9])
           ])),

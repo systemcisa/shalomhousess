@@ -62,7 +62,7 @@ class _AuthPageState extends State<AuthPage> {
                         SizedBox(
                           width: common_sm_padding,
                         ),
-                        Text('''토마토마켓은 휴대폰 번호로 가입해요.
+                        Text('''기숙사앱은 휴대폰 번호로 가입해요.
 번호는 안전하게 보관 되며
 어디에도 공개되지 않아요.''')
                       ],
