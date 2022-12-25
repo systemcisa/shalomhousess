@@ -1,16 +1,16 @@
 import 'package:beamer/beamer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shalomhouse/router/locations.dart';
+import 'package:shalomhouse/screens/home/me_page.dart';
 import 'package:shalomhouse/screens/home/orders_page.dart';
-import 'package:shalomhouse/screens/home/records_page.dart';
-import 'package:shalomhouse/states/user_notifier.dart';
+import 'package:shalomhouse/screens/home/home_page.dart';
 import 'package:shalomhouse/widgets/expandable_fab.dart';
-import 'package:provider/provider.dart';
-
 
 class HomeScreen extends StatefulWidget {
+
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -22,37 +22,19 @@ class _HomeScreenState extends State<HomeScreen> {
   int _bottomSelectedIndex = 0;
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      body: IndexedStack(
+      body:
+      IndexedStack(
         index: _bottomSelectedIndex,
         children: [
+          HomePage(),
           OrdersPage(),
-          RecordsPage(),
-          Container(color: Colors.accents[6],)
+          MePage(),
         ],
       ),
-      floatingActionButton: ExpandableFab(
-        distance: 90,
-        children: [
-          MaterialButton(
-            onPressed: () {
-              context.beamToNamed('/$LOCATION_INPUT');
-            },
-            shape: CircleBorder(),
-            height: 40,
-            color: Theme.of(context).colorScheme.primary,
-            child: Icon(Icons.add),
-          ),
-          MaterialButton(
-            onPressed: () {
-              context.beamToNamed('/$LOCATION_RECORD');
-            },
-            shape: CircleBorder(),
-            height: 40,
-            color: Theme.of(context).colorScheme.primary,
-            child: Icon(Icons.add),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton( onPressed: () {context.beamToNamed('/$LOCATION_INPUT');  },
+
       ),
       appBar: AppBar(
         title: Text('SHALOM HOUSE', style: Theme.of(context).appBarTheme.titleTextStyle,),

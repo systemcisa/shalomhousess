@@ -59,7 +59,7 @@ class OrderListWidget extends StatelessWidget {
                       maxLines:1,
                       style: Theme.of(context).textTheme.subtitle2,
                     ),
-                    Text('${order.price.toString()},000원',style: Theme.of(context).textTheme.subtitle2),
+                    Text("작업의뢰 작성일"),
                     Text(
                       DateFormat('MM-dd kkmm').format(order.createdDate),
 

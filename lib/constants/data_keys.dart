@@ -25,6 +25,7 @@ const DOC_CHATKEY = "chatKey";
 const DOC_USERKEY = "userKey";
 const DOC_MSG = "msg";
 const DOC_IMAGEDOWNLOADURLS = "imageDownloadUrls";
+const DOC_ORDERDATE = "orderdate";
 const DOC_TITLE = "title";
 const DOC_CATEGORY = "category";
 const DOC_PRICE = "price";

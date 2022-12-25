@@ -72,61 +72,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   fit: StackFit.expand,
                   children: [
                     Scaffold(
-                      bottomNavigationBar: SafeArea(
-                        top: false,
-                        bottom: true,
-                        child: Container(
-                          height: 60,
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  top: BorderSide(color: Colors.grey[300]!))),
-                          child: Padding(
-                            padding: const EdgeInsets.all(common_sm_padding),
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.favorite_border),
-                                  onPressed: () {},
-                                ),
-                                VerticalDivider(
-                                  thickness: 1,
-                                  width: common_sm_padding * 2 + 1,
-                                  indent: common_sm_padding,
-                                  endIndent: common_sm_padding,
-                                ),
-                                Column(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '4000원',
-                                      style:
-                                      Theme.of(context).textTheme.bodyText1,
-                                    ),
-                                    Text(
-                                      '가격제안불가',
-                                      style:
-                                      Theme.of(context).textTheme.bodyText2,
-                                    ),
-                                  ],
-                                ),
-                                Expanded(
-                                  child: Container(),
-                                ),
-                                TextButton(
-                                    onPressed: () {
-                                      _dealComplete = true;
-
-                                      context.beamBack();
-
-                                    },
-                                    child: Text('거래완료'))
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
                       body: CustomScrollView(
                         controller: _scrollController,
                         slivers: [
@@ -137,31 +82,24 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                 delegate: SliverChildListDelegate([
                                   _divider,
                                   Text(
-                                    orderModel.title,
+                                    "요청일 : "+orderModel.orderdate,
                                     style: Theme.of(context).textTheme.headline6,
                                   ),
-                                  _textGap,
                                   Text(
-                                    '${orderModel.price.toString()},000원',
-                                    style: Theme.of(context).textTheme.bodyText1,
+                                    "요청 건물 : "+ orderModel.title+orderModel.address+"호",
+                                    style: Theme.of(context).textTheme.headline6,
                                   ),
-                                  _textGap,
                                   Row(
                                     children: [
-                                      Text(
-                                  orderModel.address,
-                                      ),
+
                                       Text(
                                 //        ' · ${TimeCalculation.getTimeDiff(orderModel.createdDate)}',
-                                        ' · ${DateFormat('MM-dd KKmm').format(orderModel.createdDate)}',
+                                        '작업의뢰 작성일 : ${DateFormat('MM-dd KKmm').format(orderModel.createdDate)}',
                                         style:
                                         Theme.of(context).textTheme.bodyText2,
                                       ),
                                     ],
                                   ),
-
-
-
                                   Divider(
                                     height: 2,
                                     thickness: 2,
@@ -193,40 +131,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                     color: Colors.grey[200],
                                   ),
                                 ])),
-                          ),
-                          SliverToBoxAdapter(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: common_padding),
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '님의 판매 상품',
-                                    style:
-                                    Theme.of(context).textTheme.bodyText1,
-                                  ),
-                                  SizedBox(
-                                    width: _size!.width / 4,
-                                    child: MaterialButton(
-                                      padding: EdgeInsets.zero,
-                                      onPressed: () {},
-                                      child: Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Text(
-                                          '더보기',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .button!
-                                              .copyWith(color: Colors.grey),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
                           ),
                         ],
                       ),

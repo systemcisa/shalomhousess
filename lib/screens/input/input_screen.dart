@@ -1,6 +1,9 @@
 import 'dart:typed_data';
 import 'package:beamer/beamer.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shalomhouse/constants/common_size.dart';
 import 'package:shalomhouse/data/order_model.dart';
 import 'package:shalomhouse/repo/image_storage.dart';
@@ -19,11 +22,13 @@ class InputScreen extends StatefulWidget {
 }
 
 class _InputScreenState extends State<InputScreen> {
+  String _address = 'A동';
+  bool? _isChecked1 = false;
+  bool? _isChecked2 = false;
   bool _seuggestPriceSelected = false;
 
-
-  var _border= UnderlineInputBorder(
-      borderSide: BorderSide(color: Colors.transparent));
+  var _border =
+      UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent));
 
   var _divider = Divider(
     height: common_padding * 2 + 1,
@@ -45,30 +50,26 @@ class _InputScreenState extends State<InputScreen> {
     setState(() {});
 
     final String orderKey = OrderModel.generateItemKey("");
-    List<Uint8List> images =
-        context
-            .read<SelectImageNotifier>()
-            .images;
+    List<Uint8List> images = context.read<SelectImageNotifier>().images ;
 
     List<String> downloadUrls =
-    await ImageStorage.uploadImages(images, orderKey);
+        await ImageStorage.uploadImages(images, orderKey);
 
-final num? price = num.tryParse(_priceController.text);
+    final num? price = num.tryParse(_priceController.text);
 
     OrderModel orderModel = OrderModel(
         orderKey: orderKey,
         imageDownloadUrls: downloadUrls,
-        title: _nameController.text,
+        orderdate: _nameController.text,
+        title: _address,
         address: _addressController.text,
-        category: context
-            .read<CategoryNotifier>()
-            .currentCategoryInEng,
-        price: price??0,
+        category: context.read<CategoryNotifier>().currentCategoryInEng,
+        price: price ?? 0,
         negotiable: _seuggestPriceSelected,
         detail: _detailController.text,
         createdDate: DateTime.now().toUtc());
     logger.d('upload finished - ${downloadUrls.toString()}');
-    
+
     await OrderService().createNewOrder(orderModel.toJson(), orderKey);
     context.beamBack();
   }
@@ -77,9 +78,7 @@ final num? price = num.tryParse(_priceController.text);
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        Size _size = MediaQuery
-            .of(context)
-            .size;
+        Size _size = MediaQuery.of(context).size;
         return IgnorePointer(
           ignoring: isCreatingItem,
           child: Scaffold(
@@ -88,115 +87,163 @@ final num? price = num.tryParse(_priceController.text);
                   preferredSize: Size(_size.width, 2),
                   child: isCreatingItem
                       ? LinearProgressIndicator(
-                    minHeight: 2,
-                  )
+                          minHeight: 2,
+                        )
                       : Container()),
               leading: TextButton(
                 style: TextButton.styleFrom(
                     primary: Colors.black87,
                     backgroundColor:
-                    Theme
-                        .of(context)
-                        .appBarTheme
-                        .backgroundColor),
+                        Theme.of(context).appBarTheme.backgroundColor),
                 child: Text(
                   '뒤로',
                   style: TextStyle(
-                      color: Theme
-                          .of(context)
-                          .appBarTheme
-                          .foregroundColor),
+                      color: Theme.of(context).appBarTheme.foregroundColor),
                 ),
                 onPressed: () {
                   context.beamBack();
                 },
               ),
-              title: Text('SOMI MALL 주문서'),
+              title: Text('시설 보수 신청'),
               actions: [
                 TextButton(
                     style: TextButton.styleFrom(
                         primary: Colors.black87,
                         backgroundColor:
-                        Theme
-                            .of(context)
-                            .appBarTheme
-                            .backgroundColor),
+                            Theme.of(context).appBarTheme.backgroundColor),
                     child: Text(
                       '완료',
                       style: TextStyle(
-                          color: Theme
-                              .of(context)
-                              .appBarTheme
-                              .foregroundColor),
+                          color: Theme.of(context).appBarTheme.foregroundColor),
                     ),
-                    onPressed: attemptCreateItem
-                ),
+                    onPressed: attemptCreateItem),
               ],
             ),
             body: ListView(
               children: [
+                Container(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('''@최대한 자세히 작성해주세요@
+@모든 시설 보수는 오후 1시 이전까지 접수 받습니 
+다 (전기는 예외)@
+@모든 시설 보수는 오후 1시 이후에 작업 합니다(전   
+기는 예외)@'''),
+                ),
+                _divider,
                 MultiImageSelect(),
                 _divider,
                 TextFormField(
                   controller: _nameController,
                   decoration: InputDecoration(
-                      hintText: '손님이름',
+                      hintText: '신청 날짜 MM.DD',
                       contentPadding:
-                      EdgeInsets.symmetric(horizontal: common_padding),
-                      border:_border, enabledBorder: _border, focusedBorder: _border),
+                          EdgeInsets.symmetric(horizontal: common_padding),
+                      border: _border,
+                      enabledBorder: _border,
+                      focusedBorder: _border),
                 ),
                 _divider,
-                   Row(
-                     children: [
-                       Expanded(
-                         child: TextFormField(
-                           textAlign: TextAlign.end,
-                           keyboardType: TextInputType.number,
-                           controller: _priceController,
-                           onChanged: (value) {
-                             if (value == '0원') {
-                               _priceController.clear();
-                             }
-
-                             setState(() {});
-                           },
-                           decoration: InputDecoration(
-                               hintText: '주문가격',
-                               contentPadding:
-                               EdgeInsets.symmetric(horizontal: common_padding),
-                               border:_border, enabledBorder: _border, focusedBorder: _border),
-                         ),
-                       ),
-                       Text(',000원 '),
-                       Container(width: 200,)
-                     ],
-                   ),
-
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ListTile(
+                      title: Text('샬롬A동'),
+                      leading: Radio(
+                        value: "샬롬A동",
+                        groupValue: _address,
+                        onChanged: (value) {
+                          setState(() {
+                            _address = value.toString();
+                          });
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      title: Text('샬롬B동'),
+                      leading: Radio(
+                        value: '샬롬B동',
+                       groupValue: _address,
+                        onChanged: (value) {
+                          setState(() {
+                            _address = value.toString();
+                          });
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      title: Text('국제생활관'),
+                      leading: Radio(
+                        value: '국제생활관',
+                        groupValue: _address,
+                        onChanged: (value) {
+                          setState(() {
+                            _address = value.toString();
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
                 _divider,
                 TextFormField(
                   controller: _addressController,
                   decoration: InputDecoration(
-                      hintText: '손님주소',
-                      contentPadding:
+                  hintText: '몇호',
+                  contentPadding:
                       EdgeInsets.symmetric(horizontal: common_padding),
-                      border:_border, enabledBorder: _border, focusedBorder: _border),
+                  border: _border,
+                  enabledBorder: _border,
+                  focusedBorder: _border),
                 ),
                 _divider,
-              TextFormField(
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    CheckboxListTile(
+                      title: Text('A방'),
+                        value: _isChecked1,
+                        onChanged: (value) {
+                          setState(() {
+                            _isChecked1 = value;
+                          });
+                        }
+                    ),
+                    CheckboxListTile(
+                        title: Text('B방'),
+                        value: _isChecked2,
+                        onChanged: (value) {
+                          setState(() {
+                            _isChecked2 = value;
+                          });
+                        }
+                    ),
+                  ],
+                ),
+                TextFormField(
                   controller: _detailController,
                   maxLines: null,
                   keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
-                      hintText: '주문내용',
-                      contentPadding:
+                  hintText: '주문내용',
+                  contentPadding:
                       EdgeInsets.symmetric(horizontal: common_padding),
-                      border:_border, enabledBorder: _border, focusedBorder: _border),
+                  border: _border,
+                  enabledBorder: _border,
+                  focusedBorder: _border),
                 ),
-              ],
-            ),
+            ]
           ),
+        )
         );
       },
     );
+  }
+
+  void showToast(String value) {
+    Fluttertoast.showToast(
+        msg: "$value 선택",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM);
   }
 }

@@ -81,52 +81,6 @@ class _RecordDetailScreenState extends State<RecordDetailScreen> {
                   fit: StackFit.expand,
                   children: [
                     Scaffold(
-                      bottomNavigationBar: SafeArea(
-                        top: false,
-                        bottom: true,
-                        child: Container(
-                          height: 60,
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  top: BorderSide(color: Colors.grey[300]!))),
-                          child: Padding(
-                            padding: const EdgeInsets.all(common_sm_padding),
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.favorite_border),
-                                  onPressed: () {},
-                                ),
-                                VerticalDivider(
-                                  thickness: 1,
-                                  width: common_sm_padding * 2 + 1,
-                                  indent: common_sm_padding,
-                                  endIndent: common_sm_padding,
-                                ),
-                                Column(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-
-                                  ],
-                                ),
-                                Expanded(
-                                  child: Container(),
-                                ),
-                                TextButton(
-                                    onPressed: () {
-                                      _dealComplete = true;
-
-                                      context.beamBack();
-
-                                    },
-                                    child: Text('사입완료'))
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
                       body: CustomScrollView(
                         controller: _scrollController,
                         slivers: [

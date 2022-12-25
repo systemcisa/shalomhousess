@@ -4,6 +4,7 @@ import 'package:shalomhouse/constants/data_keys.dart';
 class OrderModel {
   late String orderKey;
   late List<String> imageDownloadUrls;
+  late String orderdate;
   late String title;
   late String category;
   late num price;
@@ -15,6 +16,7 @@ class OrderModel {
   OrderModel({required this.orderKey,
 
     required this.imageDownloadUrls,
+    required this.orderdate,
     required this.title,
     required this.category,
     required this.price,
@@ -28,6 +30,7 @@ class OrderModel {
     imageDownloadUrls = json[DOC_IMAGEDOWNLOADURLS] != null
         ? json[DOC_IMAGEDOWNLOADURLS].cast<String>()
         : [];
+    orderdate = json[DOC_ORDERDATE] ?? "";
     title = json[DOC_TITLE] ?? "";
     category = json[DOC_CATEGORY] ?? "none";
     price = json[DOC_PRICE] ?? 0;
@@ -43,6 +46,7 @@ class OrderModel {
     imageDownloadUrls = json[DOC_IMAGEDOWNLOADURLS] != null
         ? json[DOC_IMAGEDOWNLOADURLS].cast<String>()
         : [];
+    orderdate = json[DOC_ORDERDATE] ?? "";
     title = json[DOC_TITLE] ?? "";
     category = json[DOC_CATEGORY] ?? "none";
     price = json[DOC_PRICE] ?? 0;
@@ -62,6 +66,7 @@ class OrderModel {
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
     map[DOC_IMAGEDOWNLOADURLS] = imageDownloadUrls;
+    map[DOC_ORDERDATE] = orderdate;
     map[DOC_TITLE] = title;
     map[DOC_CATEGORY] = category;
     map[DOC_PRICE] = price;
@@ -75,6 +80,7 @@ class OrderModel {
   Map<String, dynamic> toMinJson() {
     var map = <String, dynamic>{};
     map[DOC_IMAGEDOWNLOADURLS] = imageDownloadUrls.sublist(0, 1);
+    map[DOC_ORDERDATE] = orderdate;
     map[DOC_TITLE] = title;
     map[DOC_PRICE] = price;
     return map;
