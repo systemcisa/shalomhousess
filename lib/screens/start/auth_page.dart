@@ -62,8 +62,8 @@ class _AuthPageState extends State<AuthPage> {
                         SizedBox(
                           width: common_sm_padding,
                         ),
-                        Text('''샬롬하우스 기숙사앱은 휴대폰번호로
-가입해요. 번호는 안전하게 보관 되며
+                        Text('''토마토마켓은 휴대폰 번호로 가입해요.
+번호는 안전하게 보관 되며
 어디에도 공개되지 않아요.''')
                       ],
                     ),
@@ -83,7 +83,7 @@ class _AuthPageState extends State<AuthPage> {
                             return null;
                           } else {
                             //error
-                            return '맞는 전화번호 입력해주세요';
+                            return '전화번호 똑바로 입력해줄래?';
                           }
                         }),
                     SizedBox(
