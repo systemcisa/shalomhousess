@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shalomhouse/constants/data_keys.dart';
 
 class UserModel {
-  late String userKey;
+    late String userKey;
   late String phoneNumber;
  // late String address;
   late DateTime createdDate;

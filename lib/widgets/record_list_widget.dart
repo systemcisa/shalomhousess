@@ -5,20 +5,8 @@ import 'package:beamer/beamer.dart';
 import 'package:shalomhouse/constants/common_size.dart';
 import 'package:shalomhouse/data/record_model.dart';
 import 'package:shalomhouse/router/locations.dart';
-import 'package:shalomhouse/states/category_notifier.dart';
 import 'package:shalomhouse/utils/logger.dart';
 import 'package:intl/intl.dart';
-
-
-
-var _Vdivider = VerticalDivider(
-  color: Colors.redAccent,
-  width: 80,
-  indent: 10,
-  endIndent: 10,
-  thickness: 2,
-);
-
 
 class RecordListWidget extends StatelessWidget {
   final RecordModel record;
@@ -29,7 +17,7 @@ class RecordListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (imgSize == null) {
       Size size = MediaQuery.of(context).size;
-      imgSize = size.width / 300;
+      imgSize = size.width / 6;
     }
 
     return InkWell(
@@ -43,73 +31,45 @@ class RecordListWidget extends StatelessWidget {
         context.beamToNamed(newPath);
       },
       child: SizedBox(
-       // height: imgSize,
-       height: 110,
-        child: Column(
+        height: imgSize,
+        child: Row(
           children: [
-            Text(
-              DateFormat('MM-dd kkmm').format(record.createdDate),
-              style:  TextStyle(fontSize: 20)
+            SizedBox(
+                height: imgSize,
+                width: imgSize,
+                child: ExtendedImage.network(
+                  record.imageDownloadUrls[0],
+                  fit: BoxFit.cover,
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(12),
+                )),
+            SizedBox(
+              width: common_sm_padding,
             ),
             Expanded(
-              child: Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '신발A',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2!
-                            .copyWith(
-                            decoration:
-                            TextDecoration.underline),
-                      ),
-                      Text(
-                        record.address1,
-                        style: Theme.of(context).textTheme.subtitle2,
-                      ),
-                    ],
-                  ),
-                  _Vdivider,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'NUZZON',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2!
-                            .copyWith(
-                            decoration:
-                            TextDecoration.underline),
-                      ),
-                      Text(
-                        record.address2,
-                        style: Theme.of(context).textTheme.subtitle2,
-                      ),
-                    ],
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      record.title,
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                    Text(
+                      record.detail,
+                      maxLines:1,
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                    Text("작업의뢰 작성일"),
+                    Text(
+                      DateFormat('MM-dd kkmm').format(record.createdDate),
 
-
-                  SizedBox(
-                    width: common_sm_padding,
-                  ),
-
-                  // SizedBox(
-                  //     height: imgSize,
-                  //     width: imgSize,
-                  //     child:
-                  //     ExtendedImage.network(
-                  //       record.imageDownloadUrls[0],
-                  //       fit: BoxFit.cover,
-                  //       shape: BoxShape.rectangle,
-                  //       borderRadius: BorderRadius.circular(12),
-                  //     )),
-                ],
-              ),
-            ),
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                    Expanded(
+                      child: Container(),
+                    ),
+                  ],
+                ))
           ],
         ),
       ),

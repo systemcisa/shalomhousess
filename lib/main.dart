@@ -15,8 +15,8 @@ final _routerDelegate = BeamerDelegate(
       BeamGuard(
           pathBlueprints: [
             ...HomeLocation().pathBlueprints,
-             ...InputLocation().pathBlueprints,
-             ...ItemLocation().pathBlueprints,
+            ...InputLocation().pathBlueprints,
+            ...ItemLocation().pathBlueprints,
           ],
           check: (context, location) {
             return context.watch<UserNotifier>().user != null;
@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
         future: _initialization,
         builder: (context, snapshot) {
           return AnimatedSwitcher(
-              duration: Duration(seconds: 1),
+              duration: Duration(seconds: 6),
               child: _splashLoadingWidget(snapshot));
         });
   }

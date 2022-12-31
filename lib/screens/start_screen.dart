@@ -19,7 +19,6 @@ class StartScreen extends StatelessWidget {
               children: [
             IntroPage(),
             AuthPage(),
-            Container(color: Colors.accents[9])
           ])),
     );
   }

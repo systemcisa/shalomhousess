@@ -1,7 +1,7 @@
 const COL_USERS = 'users';
 const COL_ORDERS = 'orders';
 const COL_RECORDS = 'records';
-const COL_USER_ITEMS = 'user_items';
+const COL_USER_ORDERS = 'user_orders';
 const COL_CHATROOMS = 'chatrooms';
 const COL_CHATS = 'chats';
 
@@ -26,6 +26,7 @@ const DOC_USERKEY = "userKey";
 const DOC_MSG = "msg";
 const DOC_IMAGEDOWNLOADURLS = "imageDownloadUrls";
 const DOC_ORDERDATE = "orderdate";
+const DOC_RECORDDATE = "recorddate";
 const DOC_TITLE = "title";
 const DOC_CATEGORY = "category";
 const DOC_PRICE = "price";

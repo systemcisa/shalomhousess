@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:beamer/beamer.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -59,6 +60,7 @@ class _InputScreenState extends State<InputScreen> {
 
     OrderModel orderModel = OrderModel(
         orderKey: orderKey,
+        userKey:  FirebaseAuth.instance.currentUser!.uid ,
         imageDownloadUrls: downloadUrls,
         orderdate: _nameController.text,
         title: _address,
@@ -68,7 +70,7 @@ class _InputScreenState extends State<InputScreen> {
         negotiable: _seuggestPriceSelected,
         detail: _detailController.text,
         createdDate: DateTime.now().toUtc());
-    logger.d('upload finished - ${downloadUrls.toString()}');
+    logger.d('uid - ${FirebaseAuth.instance.currentUser!.uid }');
 
     await OrderService().createNewOrder(orderModel.toJson(), orderKey);
     context.beamBack();
@@ -104,7 +106,7 @@ class _InputScreenState extends State<InputScreen> {
                   context.beamBack();
                 },
               ),
-              title: Text('시설 보수 신청'),
+              title: Text('시설점검 신청'),
               actions: [
                 TextButton(
                     style: TextButton.styleFrom(
@@ -122,15 +124,6 @@ class _InputScreenState extends State<InputScreen> {
             body: ListView(
               children: [
                 Container(),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('''@최대한 자세히 작성해주세요@
-@모든 시설 보수는 오후 1시 이전까지 접수 받습니 
-다 (전기는 예외)@
-@모든 시설 보수는 오후 1시 이후에 작업 합니다(전   
-기는 예외)@'''),
-                ),
-                _divider,
                 MultiImageSelect(),
                 _divider,
                 TextFormField(
@@ -148,9 +141,9 @@ class _InputScreenState extends State<InputScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     ListTile(
-                      title: Text('샬롬A동'),
+                      title: Text('A동'),
                       leading: Radio(
-                        value: "샬롬A동",
+                        value: "A동",
                         groupValue: _address,
                         onChanged: (value) {
                           setState(() {
@@ -160,9 +153,9 @@ class _InputScreenState extends State<InputScreen> {
                       ),
                     ),
                     ListTile(
-                      title: Text('샬롬B동'),
+                      title: Text('B동'),
                       leading: Radio(
-                        value: '샬롬B동',
+                        value: 'B동',
                        groupValue: _address,
                         onChanged: (value) {
                           setState(() {
@@ -172,9 +165,9 @@ class _InputScreenState extends State<InputScreen> {
                       ),
                     ),
                     ListTile(
-                      title: Text('국제생활관'),
+                      title: Text('국생'),
                       leading: Radio(
-                        value: '국제생활관',
+                        value: '국생',
                         groupValue: _address,
                         onChanged: (value) {
                           setState(() {
@@ -189,7 +182,7 @@ class _InputScreenState extends State<InputScreen> {
                 TextFormField(
                   controller: _addressController,
                   decoration: InputDecoration(
-                  hintText: '몇호',
+                  hintText: '호실',
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: common_padding),
                   border: _border,
@@ -197,11 +190,12 @@ class _InputScreenState extends State<InputScreen> {
                   focusedBorder: _border),
                 ),
                 _divider,
+                Text("자리 번호"),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     CheckboxListTile(
-                      title: Text('A방'),
+                      title: Text('1'),
                         value: _isChecked1,
                         onChanged: (value) {
                           setState(() {
@@ -210,7 +204,25 @@ class _InputScreenState extends State<InputScreen> {
                         }
                     ),
                     CheckboxListTile(
-                        title: Text('B방'),
+                        title: Text('2'),
+                        value: _isChecked2,
+                        onChanged: (value) {
+                          setState(() {
+                            _isChecked2 = value;
+                          });
+                        }
+                    ),
+                    CheckboxListTile(
+                        title: Text('3'),
+                        value: _isChecked2,
+                        onChanged: (value) {
+                          setState(() {
+                            _isChecked2 = value;
+                          });
+                        }
+                    ),
+                    CheckboxListTile(
+                        title: Text('4'),
                         value: _isChecked2,
                         onChanged: (value) {
                           setState(() {
@@ -222,10 +234,11 @@ class _InputScreenState extends State<InputScreen> {
                 ),
                 TextFormField(
                   controller: _detailController,
-                  maxLines: null,
+                  maxLines: 8,
                   keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
-                  hintText: '주문내용',
+                  hintText: '''내용<구체적으로 적어주세요>
+예) 김샬롬 옷장 두 번째 서랍이 안닫혀요''',
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: common_padding),
                   border: _border,
