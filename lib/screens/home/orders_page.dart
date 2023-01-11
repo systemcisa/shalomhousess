@@ -2,52 +2,81 @@ import 'package:flutter/material.dart';
 import 'package:shalomhouse/constants/common_size.dart';
 import 'package:shalomhouse/data/order_model.dart';
 import 'package:shalomhouse/repo/order_service.dart';
+import 'package:shalomhouse/utils/logger.dart';
 import 'package:shalomhouse/widgets/order_list_widget.dart';
 import 'package:shimmer/shimmer.dart';
 
-class OrdersPage extends StatelessWidget {
-  const OrdersPage({Key? key}) : super(key: key);
+class OrdersPage extends StatefulWidget {
+  final String userKey;
+  const OrdersPage({Key? key, required this.userKey}) : super(key: key);
+
+  @override
+  State<OrdersPage> createState() => _OrdersPageState();
+}
+
+class _OrdersPageState extends State<OrdersPage> {
+  bool init = false;
+  List<OrderModel> orders = [];
+
+  @override
+  void initState() {
+    if (!init) {
+      _onRefresh();
+      init = true;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
+      builder: (context, constraints) {
         Size size = MediaQuery
             .of(context)
             .size;
-        final imgSize = size.width / 5.5;
-        return FutureBuilder<List<OrderModel>>(
-            future: OrderService().getOrders(),
-            builder: (context, snapshot) {
+        final imgSize = size.width / 4;
               return AnimatedSwitcher(
                   duration: Duration(milliseconds: 300),
-                  child: (snapshot.hasData && snapshot.data!.isNotEmpty)
-                      ? _listView(imgSize, snapshot.data!)
+        //          child: _listView(imgSize),);
+
+                  child: (orders.isNotEmpty)
+                      ? _listView(imgSize)
                       : _shimmerListView(imgSize));
-            });
+
       },
     );
   }
 
-  ListView _listView(double imgSize, List<OrderModel> orders) {
-    return ListView.separated(
-        padding: EdgeInsets.all(common_padding),
-        separatorBuilder: (BuildContext context, int index) {
-          return Divider(
-            height: common_padding+1,
-            thickness: 1,
-            color: Colors.grey[300],
-            indent: common_padding,
-            endIndent: common_padding,
-          );
-        },
-        itemBuilder: (BuildContext context, int index) {
-          OrderModel order = orders[index];
-          return OrderListWidget(order, imgSize: imgSize);
-        }, itemCount: orders.length,
-      );
+  Future _onRefresh() async {
+    orders.clear();
+    orders.addAll(await OrderService().getOrders(widget.userKey));
+    setState(() {});
   }
+
+  Widget _listView(double imgSize) {
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: ListView.separated(
+          padding: EdgeInsets.all(common_padding),
+          separatorBuilder: (context, index) {
+            return Divider(
+              height: common_padding*2+1,
+              thickness: 1,
+              color: Colors.grey[300],
+              indent: common_padding,
+              endIndent: common_padding,
+            );
+          },
+          itemBuilder: ( context, index) {
+            OrderModel order = orders[index];
+            return OrderListWidget(order, imgSize: imgSize);
+          }, itemCount: orders.length,
+        ),
+    );
+  }
+
   Widget _shimmerListView(double imgSize) {
+    logger.d(orders);
     return Shimmer.fromColors(
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
@@ -139,5 +168,4 @@ class OrdersPage extends StatelessWidget {
       ),
     );
   }
-
 }

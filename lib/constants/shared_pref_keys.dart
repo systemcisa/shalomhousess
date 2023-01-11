@@ -1,1 +1,2 @@
-const SHARED_ADDRESS = 'address';
+const SHARED_STUDENTNAME = 'studentname';
+const SHARED_STUDENTNUN = 'studentnum';

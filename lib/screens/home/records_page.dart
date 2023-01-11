@@ -5,8 +5,26 @@ import 'package:shalomhouse/repo/record_service.dart';
 import 'package:shalomhouse/widgets/record_list_widget.dart';
 import 'package:shimmer/shimmer.dart';
 
-class RecordsPage extends StatelessWidget {
-  const RecordsPage({Key? key}) : super(key: key);
+class RecordsPage extends StatefulWidget {
+  final String userKey;
+  const RecordsPage({Key? key ,required this.userKey} ) : super(key: key);
+
+  @override
+  State<RecordsPage> createState() => _RecordsPageState();
+}
+
+class _RecordsPageState extends State<RecordsPage> {
+  bool init = false;
+  List<RecordModel> records = [];
+
+  @override
+  void initState() {
+    if (!init) {
+      _onRefresh();
+      init = true;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,43 +35,53 @@ class RecordsPage extends StatelessWidget {
             .size;
         final imgSize = size.width / 4;
         return FutureBuilder<List<RecordModel>>(
-            future: RecordService().getRecords(),
+            future: RecordService().getRecords(widget.userKey),
             builder: (context, snapshot) {
               return AnimatedSwitcher(
-                  duration: Duration(milliseconds: 300),
-                  child: (snapshot.hasData && snapshot.data!.isNotEmpty)
-                      ? _listView(imgSize, snapshot.data!)
+                  duration: const Duration(milliseconds: 300),
+                  child: (records.isNotEmpty)
+                      ? _listView(imgSize)
                       : _shimmerListView(imgSize));
             });
       },
     );
   }
 
-  ListView _listView (double imgSize, List<RecordModel> records) {
-    return ListView.separated(
-        padding: EdgeInsets.all(common_padding),
-        separatorBuilder: (BuildContext context, int index) {
-          return Divider(
-            height: common_padding+1,
-            thickness: 1,
-            color: Colors.grey[300],
-            indent: common_padding,
-            endIndent: common_padding,
-          );
-        },
-        itemBuilder: (BuildContext context, int index) {
-          RecordModel record = records[index];
-          return RecordListWidget(record, imgSize: imgSize);
-        }, itemCount: records.length,
-      );
+  Future _onRefresh() async {
+    records.clear();
+    records.addAll(await RecordService().getRecords(widget.userKey));
+    setState(() {});
   }
+
+  Widget _listView(double imgSize) {
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: ListView.separated(
+          padding: const EdgeInsets.all(common_padding),
+          separatorBuilder: (BuildContext context, int index) {
+            return Divider(
+              height: common_padding+1,
+              thickness: 1,
+              color: Colors.grey[300],
+              indent: common_padding,
+              endIndent: common_padding,
+            );
+          },
+          itemBuilder: (BuildContext context, int index) {
+            RecordModel record = records[index];
+            return RecordListWidget(record, imgSize: imgSize);
+          }, itemCount: records.length,
+        ),
+    );
+  }
+
   Widget _shimmerListView(double imgSize) {
     return Shimmer.fromColors(
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
       enabled: true,
       child: ListView.separated(
-        padding: EdgeInsets.all(common_padding),
+        padding: const EdgeInsets.all(common_padding),
         separatorBuilder: (context, index) {
           return Divider(
             height: common_padding * 2 + 1,
@@ -76,7 +104,7 @@ class RecordsPage extends StatelessWidget {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
                     )),
-                SizedBox(
+                const SizedBox(
                   width: common_sm_padding,
                 ),
                 Expanded(
@@ -91,7 +119,7 @@ class RecordsPage extends StatelessWidget {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(3),
                             )),
-                        SizedBox(
+                        const SizedBox(
                           height: 4,
                         ),
                         Container(
@@ -102,7 +130,7 @@ class RecordsPage extends StatelessWidget {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(3),
                             )),
-                        SizedBox(
+                        const SizedBox(
                           height: 4,
                         ),
                         Container(

@@ -41,7 +41,7 @@ class _MultiImageSelectState extends State<MultiImageSelect> {
                     _isPickingImages = true;
                     setState(() {});
                     final ImagePicker _picker = ImagePicker();
-                    final List<XFile>? images =
+                    final List<XFile> images =
                         await _picker.pickMultiImage(imageQuality: 10);
                     if (images != null && images.isNotEmpty) {
                       context.read<SelectImageNotifier>().setNewImages(images);
@@ -50,15 +50,19 @@ class _MultiImageSelectState extends State<MultiImageSelect> {
                     setState(() {});
                   },
                   child: Container(
+                      width: imageSize,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(imageCorner),
+                          border: Border.all(color: Colors.grey, width: 1)),
                       child: _isPickingImages
-                          ? Padding(
-                              padding: const EdgeInsets.all(8.0),
+                          ? const Padding(
+                              padding: EdgeInsets.all(8.0),
                               child: CircularProgressIndicator(),
                             )
                           : Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.camera_alt_rounded,
                                   color: Colors.grey,
                                 ),
@@ -67,11 +71,7 @@ class _MultiImageSelectState extends State<MultiImageSelect> {
                                   style: Theme.of(context).textTheme.subtitle2,
                                 )
                               ],
-                            ),
-                      width: imageSize,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(imageCorner),
-                          border: Border.all(color: Colors.grey, width: 1))),
+                            )),
                 ),
               ),
               ...List.generate(
@@ -98,12 +98,12 @@ class _MultiImageSelectState extends State<MultiImageSelect> {
                                         child: Padding(
                                           padding:
                                               EdgeInsets.all(imageSize / 3),
-                                          child: CircularProgressIndicator(),
+                                          child: const CircularProgressIndicator(),
                                         ));
                                   case LoadState.completed:
                                     return null;
                                   case LoadState.failed:
-                                    return Icon(Icons.cancel);
+                                    return const Icon(Icons.cancel);
                                 }
                               },
                               borderRadius: BorderRadius.circular(imageCorner),
@@ -116,11 +116,11 @@ class _MultiImageSelectState extends State<MultiImageSelect> {
                             width: 40,
                             height: 40,
                             child: IconButton(
-                              padding: EdgeInsets.all(8),
+                              padding: const EdgeInsets.all(8),
                               onPressed: () {
                               selectImageNotifier.removeImage(index);
                               },
-                              icon: Icon(Icons.remove_circle),
+                              icon: const Icon(Icons.remove_circle),
                               color: Colors.black54,
                             ),
                           )

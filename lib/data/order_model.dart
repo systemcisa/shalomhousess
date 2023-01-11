@@ -4,6 +4,8 @@ import 'package:shalomhouse/constants/data_keys.dart';
 class OrderModel {
   late String orderKey;
   late String userKey;
+  late String studentname;
+  late String studentnum;
   late List<String> imageDownloadUrls;
   late String orderdate;
   late String title;
@@ -12,12 +14,20 @@ class OrderModel {
   late bool negotiable;
   late String detail;
   late String address;
+  late bool isChecked1;
+  late bool isChecked2;
+  late bool isChecked3;
+  late bool isChecked4;
+  late bool isChecked5;
+  late bool isChecked6;
   late DateTime createdDate;
   DocumentReference? reference;
 
   OrderModel({
     required this.orderKey,
     required this.userKey,
+    required this.studentname,
+    required this.studentnum,
     required this.imageDownloadUrls,
     required this.orderdate,
     required this.title,
@@ -26,12 +36,20 @@ class OrderModel {
     required this.negotiable,
     required this.detail,
     required this.address,
+    required this.isChecked1,
+    required this.isChecked2,
+    required this.isChecked3,
+    required this.isChecked4,
+    required this.isChecked5,
+    required this.isChecked6,
     required this.createdDate,
     this.reference
   });
 
   OrderModel.fromJson(Map<String, dynamic> json, this.orderKey, this.reference) {
     userKey = json[DOC_USERKEY] ?? "";
+    studentname = json[DOC_STUDENTNAME] ?? "";
+    studentnum = json[DOC_STUDENTNUM] ?? "";
     imageDownloadUrls = json[DOC_IMAGEDOWNLOADURLS] != null
         ? json[DOC_IMAGEDOWNLOADURLS].cast<String>()
         : [];
@@ -42,6 +60,12 @@ class OrderModel {
     negotiable = json[DOC_NEGOTIABLE] ?? false;
     detail = json[DOC_DETAIL] ?? "";
     address = json[DOC_ADDRESS] ?? "";
+    isChecked1 = json[DOC_ISCHECKED1] ?? false;
+    isChecked2 = json[DOC_ISCHECKED2] ?? false;
+    isChecked3 = json[DOC_ISCHECKED3] ?? false;
+    isChecked4 = json[DOC_ISCHECKED4] ?? false;
+    isChecked5 = json[DOC_ISCHECKED5] ?? false;
+    isChecked6 = json[DOC_ISCHECKED6] ?? false;
     createdDate = json[DOC_CREATEDDATE] == null
         ? DateTime.now().toUtc()
         : (json[DOC_CREATEDDATE] as Timestamp).toDate();
@@ -49,6 +73,8 @@ class OrderModel {
 
   OrderModel.fromAlgoliaObject(Map<String, dynamic> json, this.orderKey) {
     userKey = json[DOC_USERKEY] ?? "";
+    studentname = json[DOC_STUDENTNAME] ?? "";
+    studentnum = json[DOC_STUDENTNUM] ?? "";
     imageDownloadUrls = json[DOC_IMAGEDOWNLOADURLS] != null
         ? json[DOC_IMAGEDOWNLOADURLS].cast<String>()
         : [];
@@ -59,6 +85,12 @@ class OrderModel {
     negotiable = json[DOC_NEGOTIABLE] ?? false;
     detail = json[DOC_DETAIL] ?? "";
     address = json[DOC_ADDRESS] ?? "";
+    isChecked1 = json[DOC_ISCHECKED1] ?? false;
+    isChecked2 = json[DOC_ISCHECKED2] ?? false;
+    isChecked3 = json[DOC_ISCHECKED3] ?? false;
+    isChecked4 = json[DOC_ISCHECKED4] ?? false;
+    isChecked5 = json[DOC_ISCHECKED5] ?? false;
+    isChecked6 = json[DOC_ISCHECKED6] ?? false;
     createdDate = DateTime.now().toUtc();
   }
 
@@ -72,6 +104,8 @@ class OrderModel {
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
     map[DOC_USERKEY] = userKey;
+    map[DOC_STUDENTNAME] = studentname;
+    map[DOC_STUDENTNUM] = studentnum;
     map[DOC_IMAGEDOWNLOADURLS] = imageDownloadUrls;
     map[DOC_ORDERDATE] = orderdate;
     map[DOC_TITLE] = title;
@@ -80,6 +114,12 @@ class OrderModel {
     map[DOC_NEGOTIABLE] = negotiable;
     map[DOC_DETAIL] = detail;
     map[DOC_ADDRESS] = address;
+    map[DOC_ISCHECKED1] = isChecked1;
+    map[DOC_ISCHECKED2] = isChecked2;
+    map[DOC_ISCHECKED3] = isChecked3;
+    map[DOC_ISCHECKED4] = isChecked4;
+    map[DOC_ISCHECKED5] = isChecked5;
+    map[DOC_ISCHECKED6] = isChecked6;
     map[DOC_CREATEDDATE] = createdDate;
     return map;
   }

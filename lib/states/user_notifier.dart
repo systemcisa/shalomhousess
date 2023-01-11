@@ -25,15 +25,18 @@ class UserNotifier extends ChangeNotifier {
     _user = user;
     if (user != null && user.phoneNumber != null) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String address = prefs.getString(SHARED_ADDRESS) ?? "";
+      String studentname = prefs.getString(SHARED_STUDENTNAME) ?? "";
+      String studentnum = prefs.getString(SHARED_STUDENTNUN) ?? "";
       String phoneNumber = user.phoneNumber!;
       String userKey = user.uid;
       UserModel userModel = UserModel(
           userKey: "",
           phoneNumber: phoneNumber,
-  //        address: address,
+          studentname: studentname,
+          studentnum: studentnum,
           createdDate: DateTime.now().toUtc());
       await UserService().createNewUser(userModel.toJson(), userKey);
+
       _userModel = await UserService().getUserModel(userKey);
       logger.d(_userModel!.toJson().toString());
     }

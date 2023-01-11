@@ -1,5 +1,4 @@
 import 'package:beamer/beamer.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,14 +27,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     UserModel? userModel = context.read<UserNotifier>().userModel;
     return Scaffold(
-      body:
-      IndexedStack(
+      body:(userModel == null)
+        ? Container()
+        : IndexedStack(
         index: _bottomSelectedIndex,
         children: [
           HomePage(),
-          OrdersPage(),
-          RecordsPage(),
-          MePage(),
+          OrdersPage(userKey: userModel.userKey),
+          RecordsPage(userKey: userModel.userKey),
+          const MePage(),
         ],
       ),
       floatingActionButton: ExpandableFab(
@@ -45,19 +45,19 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               context.beamToNamed('/$LOCATION_INPUT');
             },
-            shape: CircleBorder(),
+            shape: const CircleBorder(),
             height: 40,
             color: Theme.of(context).colorScheme.primary,
-            child: Icon(Icons.build_sharp),
+            child: const Icon(Icons.build_sharp),
           ),
           MaterialButton(
             onPressed: () {
               context.beamToNamed('/$LOCATION_RECORD');
             },
-            shape: CircleBorder(),
+            shape: const CircleBorder(),
             height: 40,
             color: Theme.of(context).colorScheme.primary,
-            child: Icon(Icons.bolt),
+            child: const Icon(Icons.bolt),
           ),
         ],
       ),
@@ -70,14 +70,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 FirebaseAuth.instance.signOut();
                 context.beamToNamed("/");
               },
-              icon: Icon(CupertinoIcons.nosign)),
+              icon: const Icon(CupertinoIcons.nosign)),
         ],),
       bottomNavigationBar: BottomNavigationBar(
 
           currentIndex: _bottomSelectedIndex,
           selectedItemColor: Colors.blueAccent,
           unselectedItemColor: Colors.green,
-          items: [
+          items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home, color: Colors.grey), label: '홈',),
             BottomNavigationBarItem(icon: Icon(Icons.build, color: Colors.grey), label: '설비관리'),
             BottomNavigationBarItem(icon: Icon(Icons.bolt, color: Colors.grey,), label: '전기관리'),

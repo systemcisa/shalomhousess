@@ -7,13 +7,23 @@ class RecordService{
   factory RecordService() => _recordService;
   RecordService._internal();
 
-  Future createNewRecord(Map<String, dynamic> json, String recordKey) async{
-    DocumentReference<Map<String, dynamic>> documentReference =
+  Future createNewRecord(
+      RecordModel recordModel, String recordKey, String userKey) async{
+    DocumentReference<Map<String, dynamic>> recordDocReference =
         FirebaseFirestore.instance.collection(COL_RECORDS).doc(recordKey);
-    final DocumentSnapshot documentSnapshot = await documentReference.get();
+    DocumentReference<Map<String, dynamic>> userItemDocReference =
+    FirebaseFirestore.instance
+        .collection(COL_USERS)
+        .doc(userKey)
+    .collection(COL_USER_RECORDS)
+    .doc(recordKey);
+    final DocumentSnapshot documentSnapshot =  await recordDocReference.get();
 
     if(!documentSnapshot.exists){
-      await documentReference.set(json);
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        transaction.set(recordDocReference, recordModel.toJson());
+        transaction.set(userItemDocReference, recordModel.toMinJson());
+      });
     }
   }
   Future<RecordModel> getRecord(String recordKey) async{
@@ -24,10 +34,12 @@ class RecordService{
     RecordModel recordModel = RecordModel.fromSnapshot(documentSnapshot);
     return recordModel;
   }
-  Future<List<RecordModel>> getRecords() async{
+  Future<List<RecordModel>> getRecords(String userKey) async{
     CollectionReference<Map<String, dynamic>> collectionReference = FirebaseFirestore.instance.collection(COL_RECORDS);
-    QuerySnapshot<Map<String, dynamic>> snapshot = await collectionReference.orderBy("createdDate", descending: true).get();
-   // QuerySnapshot<Map<String, dynamic>> snapshot = await collectionReference.get();
+    QuerySnapshot<Map<String, dynamic>> snapshot = await collectionReference
+        .where(DOC_USERKEY, isEqualTo: userKey)
+        //.orderBy("createdDate", descending: true)
+        .get();
 
     List<RecordModel> records=[];
     

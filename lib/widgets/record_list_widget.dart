@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 class RecordListWidget extends StatelessWidget {
   final RecordModel record;
   double? imgSize;
+
   RecordListWidget(this.record, {Key? key, this.imgSize}) : super(key: key);
 
   @override
@@ -43,33 +44,90 @@ class RecordListWidget extends StatelessWidget {
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.circular(12),
                 )),
-            SizedBox(
+            const SizedBox(
               width: common_sm_padding,
             ),
             Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      record.title,
-                      style: Theme.of(context).textTheme.subtitle2,
-                    ),
-                    Text(
-                      record.detail,
-                      maxLines:1,
-                      style: Theme.of(context).textTheme.subtitle2,
-                    ),
-                    Text("작업의뢰 작성일"),
-                    Text(
-                      DateFormat('MM-dd kkmm').format(record.createdDate),
-
-                      style: Theme.of(context).textTheme.subtitle2,
-                    ),
-                    Expanded(
-                      child: Container(),
-                    ),
-                  ],
-                ))
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  record.title,
+                  style: TextStyle(
+                    color: (record.negotiable == true)
+                        ? Colors.black12
+                        : Colors.black,
+                  ),
+                ),
+                Text(
+                  record.detail,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: (record.negotiable == true)
+                        ? Colors.black12
+                        : Colors.black,
+                  ),
+                ),
+                Text(
+                  "작업의뢰 작성일",
+                  style: TextStyle(
+                    color: (record.negotiable == true)
+                        ? Colors.black12
+                        : Colors.black,
+                  ),
+                ),
+                Text(
+                  DateFormat('MM-dd kkmm').format(record.createdDate),
+                  style: TextStyle(
+                    color: (record.negotiable == true)
+                        ? Colors.black12
+                        : Colors.black,
+                  ),
+                ),
+              ],
+            )),
+            const SizedBox(
+              width: 50,
+            ),
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '작성자 정보',
+                  style: TextStyle(
+                    color: (record.negotiable == true)
+                        ? Colors.black12
+                        : Colors.black,
+                  ),
+                ),
+                Text(
+                  record.studentname,
+                  style: TextStyle(
+                    color: (record.negotiable == true)
+                        ? Colors.black12
+                        : Colors.black,
+                  ),
+                ),
+                Text(
+                  record.studentnum,
+                  style: TextStyle(
+                    color: (record.negotiable == true)
+                        ? Colors.black12
+                        : Colors.black,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text("작업완료",
+                    style: TextStyle(
+                      color: (record.negotiable == true)
+                          ? Colors.redAccent
+                          : Colors.transparent,
+                    )),
+              ],
+            )),
           ],
         ),
       ),

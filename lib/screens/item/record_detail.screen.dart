@@ -1,4 +1,5 @@
 import 'package:beamer/src/beamer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shalomhouse/constants/common_size.dart';
@@ -11,6 +12,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class RecordDetailScreen extends StatefulWidget {
   final String recordKey;
+
   const RecordDetailScreen(this.recordKey, {Key? key}) : super(key: key);
 
   @override
@@ -18,20 +20,21 @@ class RecordDetailScreen extends StatefulWidget {
 }
 
 class _RecordDetailScreenState extends State<RecordDetailScreen> {
-  bool _dealComplete = false;
-  PageController _pageController = PageController();
-  ScrollController _scrollController = ScrollController();
+  final bool _dealComplete = false;
+  final PageController _pageController = PageController();
+  final ScrollController _scrollController = ScrollController();
   Size? _size;
   num? _statusBarHeight;
   bool isAppbarCollapsed = false;
-  Widget _textGap = SizedBox(
+  final Widget _textGap = const SizedBox(
     height: common_padding,
   );
-  Widget _divider = Divider(
+  final Widget _divider = Divider(
     height: common_padding * 2 + 2,
     thickness: 2,
     color: Colors.grey[200],
   );
+
   @override
   void initState() {
     _scrollController.addListener(() {
@@ -59,6 +62,12 @@ class _RecordDetailScreenState extends State<RecordDetailScreen> {
     super.dispose();
   }
 
+  void _goToChatroom(String orderKey, bool negotiable) async {
+    FirebaseFirestore.instance.collection("records").doc(orderKey).update({
+      "negotiable": true,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<RecordModel>(
@@ -74,65 +83,154 @@ class _RecordDetailScreenState extends State<RecordDetailScreen> {
                   fit: StackFit.expand,
                   children: [
                     Scaffold(
+                      bottomNavigationBar: SafeArea(
+                        top: false,
+                        bottom: true,
+                        child: Container(
+                          height: 60,
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  top: BorderSide(color: Colors.grey[300]!))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(common_sm_padding),
+                            child: TextButton(
+                                onPressed: () async {
+                                  _goToChatroom(recordModel.recordKey, true);
+                                  context.beamBack();
+                                },
+                                child: const Text('작업완료')),
+                          ),
+                        ),
+                      ),
                       body: CustomScrollView(
                         controller: _scrollController,
                         slivers: [
                           _imagesAppBar(recordModel),
                           SliverPadding(
-                            padding: EdgeInsets.all(common_padding),
+                            padding: const EdgeInsets.all(common_padding),
                             sliver: SliverList(
                                 delegate: SliverChildListDelegate([
-                                  _divider,
+                              _divider,
+                              const Text("전기작업 ",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 20)),
+                              Text("요청일 : ${recordModel.recorddate}",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 20)),
+                              Text(
+                                  "요청 건물 : ${recordModel.title} ${recordModel.address}호",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 20)),
+                              Row(
+                                children: [
+                                  const Text("방 : ",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      )),
                                   Text(
-                                    "요청일 : "+recordModel.recorddate,
-                                    style: Theme.of(context).textTheme.headline6,
-                                  ),
+                                      (recordModel.isChecked1 == true)
+                                          ? "A방 "
+                                          : "",
+                                      style: const TextStyle(color: Colors.black)),
                                   Text(
-                                    "요청 건물 : "+ recordModel.title+recordModel.address+"호",
-                                    style: Theme.of(context).textTheme.headline6,
+                                      (recordModel.isChecked2 == true)
+                                          ? "B방 "
+                                          : "",
+                                      style: const TextStyle(color: Colors.black)),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const Text("번 : ",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      )),
+                                  Text(
+                                      (recordModel.isChecked3 == true)
+                                          ? "1번  "
+                                          : "",
+                                      style: const TextStyle(color: Colors.black)),
+                                  Text(
+                                      (recordModel.isChecked4 == true)
+                                          ? "2번  "
+                                          : "",
+                                      style: const TextStyle(color: Colors.black)),
+                                  Text(
+                                      (recordModel.isChecked5 == true)
+                                          ? "3번  "
+                                          : "",
+                                      style: const TextStyle(color: Colors.black)),
+                                  Text(
+                                    (recordModel.isChecked6 == true)
+                                        ? "4번  "
+                                        : "",
+                                    style: const TextStyle(color: Colors.black),
                                   ),
-                                  Row(
-                                    children: [
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const Text("요청시간 : ",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      )),
+                                  Text(
+                                      (recordModel.isChecked7 == true)
+                                          ? "1시~4시20분 사이  "
+                                          : "",
+                                      style: const TextStyle(color: Colors.black)),
+                                  Text(
+                                      (recordModel.isChecked8 == true)
+                                          ? "다음날 오전  "
+                                          : "",
+                                      style: const TextStyle(color: Colors.black)),
+                                  Text(
+                                      (recordModel.isChecked9 == true)
+                                          ? "다음날 오후  "
+                                          : "",
+                                      style: const TextStyle(color: Colors.black)),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                      //        ' · ${TimeCalculation.getTimeDiff(orderModel.createdDate)}',
+                                      '작업의뢰 작성일 : ${DateFormat('MM-dd KKmm').format(recordModel.createdDate)}',
+                                      style: const TextStyle(
+                                          color: Colors.black, fontSize: 20)),
+                                ],
+                              ),
+                              Divider(
+                                height: 2,
+                                thickness: 2,
+                                color: Colors.grey[200],
+                              ),
+                              _textGap,
+                              Text(
+                                recordModel.detail,
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              _textGap,
+                              // Text(
+                              //   '조회 33',
+                              //   style: Theme.of(context).textTheme.caption,
+                              // ),
+                              // _textGap,
 
-                                      Text(
-                                        //        ' · ${TimeCalculation.getTimeDiff(orderModel.createdDate)}',
-                                        '작업의뢰 작성일 : ${DateFormat('MM-dd KKmm').format(recordModel.createdDate)}',
-                                        style:
-                                        Theme.of(context).textTheme.bodyText2,
-                                      ),
-                                    ],
-                                  ),
-                                  Divider(
-                                    height: 2,
-                                    thickness: 2,
-                                    color: Colors.grey[200],
-                                  ),
-                                  _textGap,
-                                  Text(
-                                    recordModel.detail,
-                                    style: Theme.of(context).textTheme.bodyText1,
-                                  ),
-                                  _textGap,
-                                  // Text(
-                                  //   '조회 33',
-                                  //   style: Theme.of(context).textTheme.caption,
-                                  // ),
-                                  // _textGap,
-
-                                  // MaterialButton(
-                                  //     padding: EdgeInsets.zero,
-                                  //     onPressed: () {},
-                                  //     child: Align(
-                                  //         alignment: Alignment.centerLeft,
-                                  //         child: Text(
-                                  //           '이 게시글 신고하기',
-                                  //         ))),
-                                  Divider(
-                                    height: 2,
-                                    thickness: 2,
-                                    color: Colors.grey[200],
-                                  ),
-                                ])),
+                              // MaterialButton(
+                              //     padding: EdgeInsets.zero,
+                              //     onPressed: () {},
+                              //     child: Align(
+                              //         alignment: Alignment.centerLeft,
+                              //         child: Text(
+                              //           '이 게시글 신고하기',
+                              //         ))),
+                              Divider(
+                                height: 2,
+                                thickness: 2,
+                                color: Colors.grey[200],
+                              ),
+                            ])),
                           ),
                         ],
                       ),
@@ -144,17 +242,17 @@ class _RecordDetailScreenState extends State<RecordDetailScreen> {
                       height: kToolbarHeight + _statusBarHeight!,
                       child: Container(
                         height: kToolbarHeight + _statusBarHeight!,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             gradient: LinearGradient(
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
                                 colors: [
-                                  Colors.black12,
-                                  Colors.black12,
-                                  Colors.black12,
-                                  Colors.black12,
-                                  Colors.transparent
-                                ])),
+                              Colors.black12,
+                              Colors.black12,
+                              Colors.black12,
+                              Colors.black12,
+                              Colors.transparent
+                            ])),
                       ),
                     ),
                     Positioned(
@@ -170,7 +268,7 @@ class _RecordDetailScreenState extends State<RecordDetailScreen> {
                               ? Colors.white
                               : Colors.transparent,
                           foregroundColor:
-                          isAppbarCollapsed ? Colors.black87 : Colors.white,
+                              isAppbarCollapsed ? Colors.black87 : Colors.white,
                         ),
                       ),
                     )
@@ -192,7 +290,7 @@ class _RecordDetailScreenState extends State<RecordDetailScreen> {
           child: SmoothPageIndicator(
               controller: _pageController, // PageController
               count: recordModel.imageDownloadUrls.length,
-              effect: WormEffect(
+              effect: const WormEffect(
                   dotColor: Colors.white24,
                   activeDotColor: Colors.white,
                   radius: 2,

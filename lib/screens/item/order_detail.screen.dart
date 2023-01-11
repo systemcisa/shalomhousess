@@ -1,14 +1,18 @@
 import 'package:beamer/src/beamer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shalomhouse/constants/common_size.dart';
 import 'package:shalomhouse/data/order_model.dart';
+import 'package:shalomhouse/data/user_model.dart';
 import 'package:shalomhouse/repo/order_service.dart';
 import 'package:intl/intl.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   final String orderKey;
+
   const OrderDetailScreen(this.orderKey, {Key? key}) : super(key: key);
 
   @override
@@ -17,19 +21,20 @@ class OrderDetailScreen extends StatefulWidget {
 
 class _OrderDetailScreenState extends State<OrderDetailScreen> {
   bool _dealComplete = false;
-  PageController _pageController = PageController();
-  ScrollController _scrollController = ScrollController();
+  final PageController _pageController = PageController();
+  final ScrollController _scrollController = ScrollController();
   Size? _size;
   num? _statusBarHeight;
   bool isAppbarCollapsed = false;
-  Widget _textGap = SizedBox(
+  final Widget _textGap = const SizedBox(
     height: common_padding,
   );
-  Widget _divider = Divider(
+  final Widget _divider = Divider(
     height: common_padding * 2 + 2,
     thickness: 2,
     color: Colors.grey[200],
   );
+
   @override
   void initState() {
     _scrollController.addListener(() {
@@ -57,6 +62,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     super.dispose();
   }
 
+  void _goToChatroom(String orderKey, bool negotiable) async {
+    FirebaseFirestore.instance.collection("orders").doc(orderKey).update({
+      "negotiable": true,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<OrderModel>(
@@ -72,65 +83,138 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   fit: StackFit.expand,
                   children: [
                     Scaffold(
+                      bottomNavigationBar: SafeArea(
+                        top: false,
+                        bottom: true,
+                        child: Container(
+                          height: 60,
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  top: BorderSide(color: Colors.grey[300]!))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(common_sm_padding),
+                            child: TextButton(
+                                onPressed: () async {
+                                  _goToChatroom(orderModel.orderKey, true);
+                                  context.beamBack();
+                                },
+                                child: const Text('작업완료')),
+                          ),
+                        ),
+                      ),
                       body: CustomScrollView(
                         controller: _scrollController,
                         slivers: [
                           _imagesAppBar(orderModel),
                           SliverPadding(
-                            padding: EdgeInsets.all(common_padding),
+                            padding: const EdgeInsets.all(common_padding),
                             sliver: SliverList(
                                 delegate: SliverChildListDelegate([
-                                  _divider,
+                              _divider,
+                              const Text("설비작업 ",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 20)),
+                              Text("요청일 : ${orderModel.orderdate}",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 20)),
+                              Text(
+                                  "요청 건물 : ${orderModel.title} ${orderModel.address}호",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 20)),
+                              Row(
+                                children: [
+                                  const Text("방 : ",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      )),
                                   Text(
-                                    "요청일 : "+orderModel.orderdate,
-                                    style: Theme.of(context).textTheme.headline6,
-                                  ),
+                                      (orderModel.isChecked1 == true)
+                                          ? "A방 "
+                                          : "",
+                                      style:
+                                          const TextStyle(color: Colors.black)),
                                   Text(
-                                    "요청 건물 : "+ orderModel.title+orderModel.address+"호",
-                                    style: Theme.of(context).textTheme.headline6,
+                                      (orderModel.isChecked2 == true)
+                                          ? "B방 "
+                                          : "",
+                                      style:
+                                          const TextStyle(color: Colors.black)),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const Text("번 : ",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      )),
+                                  Text(
+                                      (orderModel.isChecked3 == true)
+                                          ? "1번  "
+                                          : "",
+                                      style:
+                                          const TextStyle(color: Colors.black)),
+                                  Text(
+                                      (orderModel.isChecked4 == true)
+                                          ? "2번  "
+                                          : "",
+                                      style:
+                                          const TextStyle(color: Colors.black)),
+                                  Text(
+                                      (orderModel.isChecked5 == true)
+                                          ? "3번  "
+                                          : "",
+                                      style:
+                                          const TextStyle(color: Colors.black)),
+                                  Text(
+                                    (orderModel.isChecked6 == true)
+                                        ? "4번  "
+                                        : "",
+                                    style: const TextStyle(color: Colors.black),
                                   ),
-                                  Row(
-                                    children: [
+                                ],
+                              ),
 
-                                      Text(
-                                //        ' · ${TimeCalculation.getTimeDiff(orderModel.createdDate)}',
-                                        '작업의뢰 작성일 : ${DateFormat('MM-dd KKmm').format(orderModel.createdDate)}',
-                                        style:
-                                        Theme.of(context).textTheme.bodyText2,
-                                      ),
-                                    ],
-                                  ),
-                                  Divider(
-                                    height: 2,
-                                    thickness: 2,
-                                    color: Colors.grey[200],
-                                  ),
-                                  _textGap,
+                              Row(
+                                children: [
                                   Text(
-                                    orderModel.detail,
-                                    style: Theme.of(context).textTheme.bodyText1,
-                                  ),
-                                  _textGap,
-                                  // Text(
-                                  //   '조회 33',
-                                  //   style: Theme.of(context).textTheme.caption,
-                                  // ),
-                                  // _textGap,
+                                      //        ' · ${TimeCalculation.getTimeDiff(orderModel.createdDate)}',
+                                      '작업의뢰 작성일 : ${DateFormat('MM-dd KKmm').format(orderModel.createdDate)}',
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                      )),
+                                ],
+                              ),
+                              Divider(
+                                height: 2,
+                                thickness: 2,
+                                color: Colors.grey[200],
+                              ),
+                              _textGap,
+                              Text(
+                                orderModel.detail,
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              _textGap,
+                              // Text(
+                              //   '조회 33',
+                              //   style: Theme.of(context).textTheme.caption,
+                              // ),
+                              // _textGap,
 
-                                  // MaterialButton(
-                                  //     padding: EdgeInsets.zero,
-                                  //     onPressed: () {},
-                                  //     child: Align(
-                                  //         alignment: Alignment.centerLeft,
-                                  //         child: Text(
-                                  //           '이 게시글 신고하기',
-                                  //         ))),
-                                  Divider(
-                                    height: 2,
-                                    thickness: 2,
-                                    color: Colors.grey[200],
-                                  ),
-                                ])),
+                              // MaterialButton(
+                              //     padding: EdgeInsets.zero,
+                              //     onPressed: () {},
+                              //     child: Align(
+                              //         alignment: Alignment.centerLeft,
+                              //         child: Text(
+                              //           '이 게시글 신고하기',
+                              //         ))),
+                              Divider(
+                                height: 2,
+                                thickness: 2,
+                                color: Colors.grey[200],
+                              ),
+                            ])),
                           ),
                         ],
                       ),
@@ -142,17 +226,17 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       height: kToolbarHeight + _statusBarHeight!,
                       child: Container(
                         height: kToolbarHeight + _statusBarHeight!,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             gradient: LinearGradient(
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
                                 colors: [
-                                  Colors.black12,
-                                  Colors.black12,
-                                  Colors.black12,
-                                  Colors.black12,
-                                  Colors.transparent
-                                ])),
+                              Colors.black12,
+                              Colors.black12,
+                              Colors.black12,
+                              Colors.black12,
+                              Colors.transparent
+                            ])),
                       ),
                     ),
                     Positioned(
@@ -168,7 +252,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               ? Colors.white
                               : Colors.transparent,
                           foregroundColor:
-                          isAppbarCollapsed ? Colors.black87 : Colors.white,
+                              isAppbarCollapsed ? Colors.black87 : Colors.white,
                         ),
                       ),
                     )
@@ -190,7 +274,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           child: SmoothPageIndicator(
               controller: _pageController, // PageController
               count: orderModel.imageDownloadUrls.length,
-              effect: WormEffect(
+              effect: const WormEffect(
                   dotColor: Colors.white24,
                   activeDotColor: Colors.white,
                   radius: 2,

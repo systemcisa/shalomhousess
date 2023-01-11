@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shalomhouse/router/locations.dart';
 import 'package:shalomhouse/screens/splash_screen.dart';
+import 'package:shalomhouse/screens/start/auth_page.dart';
 import 'package:shalomhouse/screens/start_screen.dart';
 import 'package:shalomhouse/states/user_notifier.dart';
 import 'package:shalomhouse/utils/logger.dart';
@@ -49,7 +50,7 @@ class _MyAppState extends State<MyApp> {
         future: _initialization,
         builder: (context, snapshot) {
           return AnimatedSwitcher(
-              duration: Duration(seconds: 6),
+              duration: Duration(seconds: 1),
               child: _splashLoadingWidget(snapshot));
         });
   }

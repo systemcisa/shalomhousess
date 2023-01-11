@@ -17,7 +17,7 @@ class IntroPage extends StatelessWidget {
         Size size = MediaQuery.of(context).size;
             return SafeArea(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: common_padding),
+                padding: const EdgeInsets.symmetric(horizontal: common_padding),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -29,22 +29,22 @@ class IntroPage extends StatelessWidget {
                     SizedBox(
                         height: size.height/1.5,
                         child: ExtendedImage.asset('assets/imgs/SAM_0161.jpeg')),
-                    Text('서울여자대학교 샬롬하우스 기숙사입니다'),
-                    Text('기숙사 광고 및 시설관리를 위한 앱입니다~'),
-                    SizedBox(
+                    const Text('서울여자대학교 샬롬하우스 기숙사입니다'),
+                    const Text('기숙사 광고 및 시설관리를 위한 앱입니다~'),
+                    const SizedBox(
                       height: 18,
                     ),
                     TextButton(
                       onPressed: () async {
-                        context.read<PageController>().animateToPage(1, duration: Duration(milliseconds: 500), curve: Curves.ease);
+                        context.read<PageController>().animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
 
                       },
-                      child: Text(
-                          '         동대문 사입 시작하기         ',
-                          style: Theme.of(context).textTheme.button ),
                       style: TextButton.styleFrom(
                           backgroundColor: Theme.of(context).primaryColor
                       ),
+                      child: Text(
+                          '         기숙사 앱 시작하기         ',
+                          style: Theme.of(context).textTheme.button ),
                     ),
                   ],
                 ),
