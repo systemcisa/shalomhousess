@@ -1,10 +1,10 @@
+import 'dart:async';
+
 import 'package:beamer/beamer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:shalomhouse/router/locations.dart';
 import 'package:shalomhouse/screens/splash_screen.dart';
-import 'package:shalomhouse/screens/start/auth_page.dart';
 import 'package:shalomhouse/screens/start_screen.dart';
 import 'package:shalomhouse/states/user_notifier.dart';
 import 'package:shalomhouse/utils/logger.dart';
@@ -42,6 +42,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  Future<String>? myFuture;
 
   @override
   Widget build(BuildContext context) {
@@ -50,23 +51,47 @@ class _MyAppState extends State<MyApp> {
         future: _initialization,
         builder: (context, snapshot) {
           return AnimatedSwitcher(
-              duration: Duration(seconds: 1),
+              duration: const Duration(milliseconds: 300),
               child: _splashLoadingWidget(snapshot));
         });
   }
 
+  // @override
+  // void initState() {
+  //   myFuture = Future.delayed(Duration(seconds: 5));
+  //   super.initState();
+  // }
+
+  // @override
+  // Widget _splashLoadingWidget(AsyncSnapshot<Object?> snapshot) {
+  //   return FutureBuilder<String>(
+  //       future: myFuture,
+  //       builder: (context, snapshot) {
+  //     if (snapshot.hasError) {
+  //       // Some logic, that imo shouldn't be here... that's bad.
+  //       return Text(
+  //           'Error occur',
+  //           textDirection: TextDirection.ltr,
+  //       );
+  //     } else if (snapshot.connectionState == ConnectionState.done) {
+  //       return TomatoApp();
+  //     } else {
+  //       return SplashScreen();
+  //     }
   StatelessWidget _splashLoadingWidget(AsyncSnapshot<Object?> snapshot) {
+
     if (snapshot.hasError) {
       // print('error occur while loading.');
-      return Text(
+      return const Text(
         'Error occur',
         textDirection: TextDirection.ltr,
       );
     } else if (snapshot.connectionState == ConnectionState.done) {
-      return TomatoApp();
+      return const TomatoApp();
     } else {
-      return SplashScreen();
+      return const SplashScreen();
     }
+
   }
 }
 
@@ -75,6 +100,8 @@ class TomatoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
     return ChangeNotifierProvider<UserNotifier>(
       create: (BuildContext context) {
         return UserNotifier();
@@ -84,13 +111,13 @@ class TomatoApp extends StatelessWidget {
             primarySwatch: Colors.red,
             fontFamily: 'DoHyeon',
             hintColor: Colors.grey[350],
-            textTheme: TextTheme(button: TextStyle(color: Colors.white)),
+            textTheme: const TextTheme(button: TextStyle(color: Colors.white)),
             textButtonTheme: TextButtonThemeData(
                 style: TextButton.styleFrom(
                     backgroundColor: Colors.red,
                     primary: Colors.white,
-                    minimumSize: Size(10, 48))),
-            appBarTheme: AppBarTheme(
+                    minimumSize: const Size(10, 48))),
+            appBarTheme: const AppBarTheme(
                 backgroundColor: Colors.white,
                 foregroundColor: Colors.black87,
                 titleTextStyle: TextStyle(

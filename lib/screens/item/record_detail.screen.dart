@@ -62,12 +62,6 @@ class _RecordDetailScreenState extends State<RecordDetailScreen> {
     super.dispose();
   }
 
-  void _goToChatroom(String orderKey, bool negotiable) async {
-    FirebaseFirestore.instance.collection("records").doc(orderKey).update({
-      "negotiable": true,
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<RecordModel>(
@@ -83,25 +77,6 @@ class _RecordDetailScreenState extends State<RecordDetailScreen> {
                   fit: StackFit.expand,
                   children: [
                     Scaffold(
-                      bottomNavigationBar: SafeArea(
-                        top: false,
-                        bottom: true,
-                        child: Container(
-                          height: 60,
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  top: BorderSide(color: Colors.grey[300]!))),
-                          child: Padding(
-                            padding: const EdgeInsets.all(common_sm_padding),
-                            child: TextButton(
-                                onPressed: () async {
-                                  _goToChatroom(recordModel.recordKey, true);
-                                  context.beamBack();
-                                },
-                                child: const Text('작업완료')),
-                          ),
-                        ),
-                      ),
                       body: CustomScrollView(
                         controller: _scrollController,
                         slivers: [
@@ -110,7 +85,6 @@ class _RecordDetailScreenState extends State<RecordDetailScreen> {
                             padding: const EdgeInsets.all(common_padding),
                             sliver: SliverList(
                                 delegate: SliverChildListDelegate([
-                              _divider,
                               const Text("전기작업 ",
                                   style: TextStyle(
                                       color: Colors.black, fontSize: 20)),
@@ -186,7 +160,7 @@ class _RecordDetailScreenState extends State<RecordDetailScreen> {
                                       style: const TextStyle(color: Colors.black)),
                                   Text(
                                       (recordModel.isChecked9 == true)
-                                          ? "다음날 오후  "
+                                          ? "다음날 오후"
                                           : "",
                                       style: const TextStyle(color: Colors.black)),
                                 ],
@@ -211,20 +185,7 @@ class _RecordDetailScreenState extends State<RecordDetailScreen> {
                                 style: Theme.of(context).textTheme.bodyText1,
                               ),
                               _textGap,
-                              // Text(
-                              //   '조회 33',
-                              //   style: Theme.of(context).textTheme.caption,
-                              // ),
-                              // _textGap,
 
-                              // MaterialButton(
-                              //     padding: EdgeInsets.zero,
-                              //     onPressed: () {},
-                              //     child: Align(
-                              //         alignment: Alignment.centerLeft,
-                              //         child: Text(
-                              //           '이 게시글 신고하기',
-                              //         ))),
                               Divider(
                                 height: 2,
                                 thickness: 2,

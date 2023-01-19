@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
@@ -6,17 +8,19 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+   // Timer(Duration(seconds: 3), () { });
     return Container(
       color: Colors.white,
       child: Center(child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ExtendedImage.asset("assets/imgs/shalomhouseImg.png"),
           const CircularProgressIndicator(
             color: Colors.blueAccent,
-          )
+          ),
+
         ],
-      )),
+      ),
+      ),
     );
   }
 }

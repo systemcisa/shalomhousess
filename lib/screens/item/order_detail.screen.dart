@@ -62,11 +62,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     super.dispose();
   }
 
-  void _goToChatroom(String orderKey, bool negotiable) async {
-    FirebaseFirestore.instance.collection("orders").doc(orderKey).update({
-      "negotiable": true,
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,25 +78,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   fit: StackFit.expand,
                   children: [
                     Scaffold(
-                      bottomNavigationBar: SafeArea(
-                        top: false,
-                        bottom: true,
-                        child: Container(
-                          height: 60,
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  top: BorderSide(color: Colors.grey[300]!))),
-                          child: Padding(
-                            padding: const EdgeInsets.all(common_sm_padding),
-                            child: TextButton(
-                                onPressed: () async {
-                                  _goToChatroom(orderModel.orderKey, true);
-                                  context.beamBack();
-                                },
-                                child: const Text('작업완료')),
-                          ),
-                        ),
-                      ),
+
                       body: CustomScrollView(
                         controller: _scrollController,
                         slivers: [

@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
 
       appBar: AppBar(
-        title: Text('SHALOM HOUSE', style: Theme.of(context).appBarTheme.titleTextStyle,),
+        title: Text('SWU 기숙사', style: Theme.of(context).appBarTheme.titleTextStyle,),
         actions: [
           IconButton(
               onPressed: () {

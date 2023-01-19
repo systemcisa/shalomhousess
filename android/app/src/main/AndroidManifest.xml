@@ -18,7 +18,7 @@
     </queries>
 
    <application
-        android:label="shalomhouse"
+        android:label="SWU기숙사"
         android:usesCleartextTraffic="true"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

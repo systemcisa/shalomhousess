@@ -21,14 +21,16 @@ class IntroPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text('shalom house',
+                    SizedBox(
+                      height: 40,                    ),
+                    Text('SWU 기숙사',
                         style: Theme.of(context)
                             .textTheme
-                            .headline3!
+                            .headline4!
                             .copyWith(color: Theme.of(context).colorScheme.primary)),
                     SizedBox(
                         height: size.height/1.5,
-                        child: ExtendedImage.asset('assets/imgs/SAM_0161.jpeg')),
+                        child: ExtendedImage.asset('assets/imgs/shalomhouseImg.png')),
                     const Text('서울여자대학교 샬롬하우스 기숙사입니다'),
                     const Text('기숙사 광고 및 시설관리를 위한 앱입니다~'),
                     const SizedBox(

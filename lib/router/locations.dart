@@ -1,3 +1,6 @@
+// ignore: duplicate_ignore
+// ignore_for_file: constant_identifier_names
+
 import 'package:beamer/beamer.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shalomhouse/screens/home_screen.dart';
@@ -11,6 +14,7 @@ import 'package:shalomhouse/states/select_image_notifier.dart';
 import 'package:shalomhouse/utils/logger.dart';
 import 'package:provider/provider.dart';
 
+// ignore: constant_identifier_names
 const LOCATION_HOME = 'home';
 const LOCATION_INPUT = 'input';
 const LOCATION_ORDER = 'order';
@@ -19,19 +23,12 @@ const LOCATION_RECORD = 'record';
 const LOCATION_RECORD_ID = 'record_id';
 const LOCATION_CATEGORY_INPUT = 'category_input';
 const LOCATION_CATEGORY_RECORD = 'category_record';
-const LOCATION_CATEGORY_RECORD1 = 'category_record1';
-const LOCATION_CATEGORY_RECORD2 = 'category_record2';
-const LOCATION_CATEGORY_RECORD3 = 'category_record3';
-const LOCATION_CATEGORY_RECORD4 = 'category_record4';
-const LOCATION_CATEGORY_RECORD5 = 'category_record5';
-const LOCATION_CATEGORY_RECORD6 = 'category_record6';
-const LOCATION_CATEGORY_RECORD7 = 'category_record7';
-const LOCATION_CATEGORY_RECORD8 = 'category_record8';
+
 
 class HomeLocation extends BeamLocation {
   @override
   List<BeamPage> buildPages(BuildContext context, BeamState state) {
-    return [BeamPage(child: HomeScreen(), key: ValueKey(LOCATION_HOME))];
+    return [BeamPage(child: const HomeScreen(), key: const ValueKey(LOCATION_HOME))];
   }
 
   @override
@@ -55,37 +52,13 @@ class InputLocation extends BeamLocation {
     return [
       ...HomeLocation().buildPages(context, state),
       if (state.pathBlueprintSegments.contains(LOCATION_INPUT))
-        BeamPage(key: ValueKey(LOCATION_INPUT), child: InputScreen()),
+        BeamPage(key: const ValueKey(LOCATION_INPUT), child: const InputScreen()),
       if (state.pathBlueprintSegments.contains(LOCATION_RECORD))
-        BeamPage(key: ValueKey(LOCATION_RECORD), child: RecordScreen()),
-      if (state.pathBlueprintSegments.contains(LOCATION_CATEGORY_RECORD1))
+        BeamPage(key: const ValueKey(LOCATION_RECORD), child: const RecordScreen()),
+      if (state.pathBlueprintSegments.contains(LOCATION_CATEGORY_RECORD))
         BeamPage(
-            key: ValueKey(LOCATION_CATEGORY_RECORD1),
-            child: CategoryInputScreen()),
-      // if(state.pathBlueprintSegments.contains(LOCATION_CATEGORY_RECORD3))
-      //   BeamPage(
-      //       key: ValueKey(LOCATION_CATEGORY_RECORD3),
-      //       child:CategoryInputScreen()),
-      // if(state.pathBlueprintSegments.contains(LOCATION_CATEGORY_RECORD4))
-      //   BeamPage(
-      //       key: ValueKey(LOCATION_CATEGORY_RECORD4),
-      //       child:CategoryInputScreen()),
-      // if(state.pathBlueprintSegments.contains(LOCATION_CATEGORY_RECORD5))
-      //   BeamPage(
-      //       key: ValueKey(LOCATION_CATEGORY_RECORD5),
-      //       child:CategoryInputScreen()),
-      // if(state.pathBlueprintSegments.contains(LOCATION_CATEGORY_RECORD6))
-      //   BeamPage(
-      //       key: ValueKey(LOCATION_CATEGORY_RECORD6),
-      //       child:CategoryInputScreen()),
-      // if(state.pathBlueprintSegments.contains(LOCATION_CATEGORY_RECORD7))
-      //   BeamPage(
-      //       key: ValueKey(LOCATION_CATEGORY_RECORD7),
-      //       child:CategoryInputScreen()),
-      // if(state.pathBlueprintSegments.contains(LOCATION_CATEGORY_RECORD8))
-      //   BeamPage(
-      //       key: ValueKey(LOCATION_CATEGORY_RECORD8),
-      //       child:CategoryInputScreen()),
+            key: const ValueKey(LOCATION_CATEGORY_RECORD),
+            child: const CategoryInputScreen()),
     ];
   }
 
@@ -95,8 +68,7 @@ class InputLocation extends BeamLocation {
         '/$LOCATION_INPUT',
         '/$LOCATION_INPUT/$LOCATION_CATEGORY_INPUT',
         '/$LOCATION_RECORD',
-        '/$LOCATION_RECORD/$LOCATION_CATEGORY_RECORD1',
-        '/$LOCATION_RECORD/$LOCATION_CATEGORY_RECORD2'
+        '/$LOCATION_RECORD/$LOCATION_CATEGORY_RECORD',
       ];
 }
 
@@ -108,12 +80,12 @@ class ItemLocation extends BeamLocation {
       ...HomeLocation().buildPages(context, state),
       if (state.pathParameters.containsKey(LOCATION_ORDER_ID))
         BeamPage(
-            key: ValueKey(LOCATION_ORDER_ID),
+            key: const ValueKey(LOCATION_ORDER_ID),
             child: OrderDetailScreen(
                 state.pathParameters[LOCATION_ORDER_ID] ?? "")),
       if (state.pathParameters.containsKey(LOCATION_RECORD_ID))
         BeamPage(
-            key: ValueKey(LOCATION_RECORD_ID),
+            key: const ValueKey(LOCATION_RECORD_ID),
             child: RecordDetailScreen(
                 state.pathParameters[LOCATION_RECORD_ID] ?? "")),
     ];

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_multi_formatter/formatters/masked_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:shalomhouse/constants/common_size.dart';
 import 'package:shalomhouse/data/user_model.dart';
@@ -33,15 +34,18 @@ class _RegisterPageState extends State<RegisterPage> {
     return SafeArea(
         child: Column(
       children: [
-        Text('shalom house',
+        SizedBox(height: 40,),
+        Text('SWU 기숙사',
             style: Theme.of(context)
                 .textTheme
-                .headline3!
+                .headline4!
                 .copyWith(color: Theme.of(context).colorScheme.primary)),
+        SizedBox(height: 50,),
         const Text(
           '기본 정보 입력하기',
           style: TextStyle(color: Colors.black38),
         ),
+        SizedBox(height: 16,),
         TextFormField(
           controller: _nameController,
           decoration: InputDecoration(
@@ -53,6 +57,9 @@ class _RegisterPageState extends State<RegisterPage> {
         TextFormField(
           controller: _numController,
           keyboardType: TextInputType.number,
+          inputFormatters: [
+            MaskedInputFormatter("000000")
+          ],
           decoration: InputDecoration(
               hintText: '학번',
               contentPadding: const EdgeInsets.symmetric(horizontal: common_padding),
@@ -62,6 +69,7 @@ class _RegisterPageState extends State<RegisterPage> {
         TextField(
           controller: _codeController,
           keyboardType: TextInputType.visiblePassword,
+          maxLength: 6,
           decoration: InputDecoration(
               hintText: '기숙사코드',
               contentPadding: const EdgeInsets.symmetric(horizontal: common_padding),
@@ -70,7 +78,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         ElevatedButton(
             onPressed: () {
-              if(_codeController.text=='000000') {
+              if(_codeController.text=='202301') {
                 _saveRegisterSP(_nameController.text, _numController.text);
                 context.read<PageController>().animateToPage(3,
                     duration: const Duration(milliseconds: 500), curve: Curves.ease);
